@@ -1,0 +1,7 @@
+com\senvon\sample\BaseResponse.class
+com\senvon\sample\model\MenuInfoQuery.class
+com\senvon\sample\model\MenuInfoVO.class
+com\senvon\sample\SampleService.class
+com\senvon\sample\model\AddressInfo.class
+com\senvon\sample\model\IFStateEnum.class
+com\senvon\sample\model\RetCodeEnum.class

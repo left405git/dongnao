@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL MAP 2.0//EN"
+  "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<!-- author:Senvon created:2011-09-02 23:06:55 version:1.0 -->
+<!--
+	ID(int):
+
+	VALUE(int):
+
+	DESCRIPTION(varchar):
+
+	ENUM_TEAM(varchar):
+
+	ENUM_CODE(varchar):
+
+	ORDERBY(int):
+
+sqlMapConfig:
+	<typeAlias alias="BaseEnum" type="net.groob.analyzeTool.beans.BaseEnum" />
+	<sqlMap resource="net/groob/analyzeTool/beans/BaseEnum_SqlMap.xml" />
+-->
+<sqlMap namespace="BaseEnum">
+<typeAlias alias="BaseEnum" type="com.istock.base.enumation.BaseEnum" />
+<select id="findAllEnum" parameterClass="BaseEnum" resultClass="BaseEnum">
+<![CDATA[
+SELECT
+ ID AS id,
+ ENUM_VALUE AS value,
+ DESCRIPTION AS description,
+ ENUM_TEAM AS team,
+ ENUM_CODE AS code,
+ ORDERBY AS orderby
+FROM SYS_BASE_ENUM
+ORDER BY ENUM_TEAM ,ORDERBY
+]]>
+</select>
+
+</sqlMap>

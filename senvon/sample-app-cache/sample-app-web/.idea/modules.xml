@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../base/common-base.iml" filepath="$PROJECT_DIR$/../../base/common-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../http-service/http-service.iml" filepath="$PROJECT_DIR$/../../http-service/http-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../generator/mybatis-generator-tools.iml" filepath="$PROJECT_DIR$/../../generator/mybatis-generator-tools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../sample-app-api/sample-app-api.iml" filepath="$PROJECT_DIR$/../sample-app-api/sample-app-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../sample-app-core/sample-app-core.iml" filepath="$PROJECT_DIR$/../sample-app-core/sample-app-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../sample-app-dal/sample-app-dal.iml" filepath="$PROJECT_DIR$/../sample-app-dal/sample-app-dal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../sample-app-parent.iml" filepath="$PROJECT_DIR$/../sample-app-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample-app-web.iml" filepath="$PROJECT_DIR$/sample-app-web.iml" />
+    </modules>
+  </component>
+</project>

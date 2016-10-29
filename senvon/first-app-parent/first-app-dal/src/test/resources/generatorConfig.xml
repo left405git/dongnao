@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <!-- <classPathEntry location="c:/mysql-connector-java-5.1.14.jar"/> -->
+  <!-- <context id="context1" targetRuntime="Ibatis2Java5"> -->
+  <context id="context1" targetRuntime="Ibatis2Java5">
+  	<plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <!-- 自定义plugin -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://senvon1.vm:3306/TEST_DB?useUnicode=true&amp;characterEncoding=UTF-8" userId="root" password="123" />
+    <javaModelGenerator targetPackage="com.senvon.spring.model" targetProject="src/main/java" />
+    <sqlMapGenerator targetPackage="ibatis" targetProject="src/main/resources" />
+    <javaClientGenerator targetPackage="com.senvon.spring.dao" targetProject="src/main/java" type="SPRING" />
+    <!-- <javaClientGenerator targetPackage="com.senvon.spring.dao" targetProject="./src/main/java" type="XMLMAPPER" /> -->
+    <!-- <table schema="TEST_DB" tableName="TB_GRADE_INFO" domainObjectName="GradeInfo">
+    	<generatedKey column="ID" sqlStatement="MySql" identity="true"/>
+    </table> -->
+    <!-- <table schema="TEST_DB" tableName="TB_TEST_CHIND" domainObjectName="TestChild">
+    	<generatedKey column="ID" sqlStatement="Oracle" />
+    </table> -->
+    
+    <!-- <table schema="TEST_DB" tableName="TB_TEST_CHIND" domainObjectName="TestChild">
+    	<generatedKey column="ID" sqlStatement="SELECT LAST_INSERT_ID()" identity="true"/>
+    </table> -->
+  </context>
+</generatorConfiguration>

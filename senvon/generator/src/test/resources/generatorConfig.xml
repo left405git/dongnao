@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!-- <classPathEntry location="ojdbc14.jar" /> -->
+
+    <context id="OracleTables" targetRuntime="Ibatis2Java5">
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+        <plugin type="com.istock.generator.plugin.TopSerializablePlugin"></plugin>
+        <plugin type="com.istock.generator.plugin.SqlMapUnMergePlugin"></plugin>
+        <!-- DAO的生成,带有分页标识 -->
+        <plugin type="com.istock.generate.plugin.PaginationAnnotaionPlugin">
+        	<property name="extends" value="com.istock.base.ibatis.IbatisDaoAnnotation"/>
+        	<property name="pageClass" value="com.istock.base.ibatis.model.Page"/>
+        	<property name="template" value="aaaTemplate"/>
+        </plugin>
+
+        <commentGenerator type="com.istock.generate.plugin.DBCommentGenerator">
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+        <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+            userId="mobile_push" password="mobile_push">
+            <property name="remarksReporting" value="true" />
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.shengpay.mobilePush.dal.dataobject" targetProject="./src/test/generate/">
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mobilePush.ibatis" targetProject="./src/test/generate/">
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="SPRING" targetPackage="com.shengpay.mobilePush.daointerface" targetProject="./src/test/generate/">
+        </javaClientGenerator>
+
+        <!-- 数据库表 -->
+        <table tableName="TB_MESSAGE_ACTION" domainObjectName="MessageAction">
+            <generatedKey column="ID" sqlStatement="select SEQ_MESSAGE_ACTION.nextval from dual" />
+        </table>
+    </context>
+
+</generatorConfiguration>
