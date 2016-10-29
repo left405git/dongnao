@@ -41,7 +41,7 @@ public class GradeInfoService {
 			public Map<String, Object> load() {
 				//缓存没找到,假设查询数据库花费的时间 
 				try {
-					logger.info("========================no cache");
+					logger.info("=======================no cache");
 					++count;
 					Thread.sleep(300);
 				} catch (InterruptedException e) {
@@ -67,7 +67,7 @@ public class GradeInfoService {
 					//缓存没找到,假设查询数据库花费的时间 
 					//抽象begin
 					try {
-						logger.info("========================no cache");
+						logger.info("======================no cache");
 						++count;
 						Thread.sleep(300);
 					} catch (InterruptedException e) {
