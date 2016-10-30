@@ -17,6 +17,8 @@
 	<bean id="cacheTemplate" class="com.senvon.sample.service.CacheTemplateService">
 	
 	</bean>
+
+    <bean id="zimuCacheTemplate" class="com.senvon.sample.service.ZimuCacheTemplate"/>
 	
 	<bean id="memCachedPool" class="com.whalin.MemCached.SockIOPool" factory-method="getInstance" init-method="initialize" destroy-method="shutDown">  
     <constructor-arg>  

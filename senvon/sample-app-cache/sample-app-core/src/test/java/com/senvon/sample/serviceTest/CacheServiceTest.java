@@ -47,7 +47,7 @@ public class CacheServiceTest {
 			logger.info("====={}",i);
 			latch.countDown();
 		}
-		Thread.sleep(6000);
+		Thread.sleep(5000);
 		Integer count = service.getCount();
 		logger.info("======{}",count);
 		Assert.assertTrue(count == 1);
@@ -68,7 +68,7 @@ public class CacheServiceTest {
 		long done = System.currentTimeMillis();
 		logger.info("============耗时1>>{}",  (done - start));
 
-		Thread.sleep(5000);
+		Thread.sleep(2000);
 		Integer count = service.getCount();
 		logger.info("======{}",count);
 

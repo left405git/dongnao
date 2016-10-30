@@ -20,6 +20,8 @@ public class GradeInfoService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
+	private ZimuCacheTemplate zimuCacheTemplate;
+	@Autowired
 	private MemCachedClient client;
 
 	private Integer count = 0;
@@ -35,7 +37,7 @@ public class GradeInfoService {
 		String key = "senvon";
 		Date expire = DateUtils.addSeconds(new Date(), 3);
 
-		return cacheTemplate.findCache(key, expire, new TypeReference<Map<String, Object>>() {
+		Map<String, Object> cache = cacheTemplate.findCache(key, expire, new TypeReference<Map<String, Object>>() {
 		}, new LoadCallback<Map<String, Object>>() {
 			@Override
 			public Map<String, Object> load() {
@@ -54,6 +56,8 @@ public class GradeInfoService {
 			}
 
 		});
+		logger.info("==================cache:{}", JSON.toJSONString(cache));
+		return cache;
 	}
 
 	public /*synchronized*/ Map<String, Object> query() {
@@ -123,6 +127,7 @@ public class GradeInfoService {
 			synchronized (this) {
 				json = client.get(key) + "";
 				if (StringUtils.isBlank(json) || json.equalsIgnoreCase("null")) {
+
 					logger.info("==================>>{}", json + "：缓存为空，查询数据库");
 					try {
 						++count;
@@ -149,5 +154,28 @@ public class GradeInfoService {
 	}
 
 
+	public Map<String, Object> queryWithTemplate() {
+		String key = "zimu";
+		Date expiry = DateUtils.addSeconds(new Date(), 3);
+
+		return zimuCacheTemplate.find(key, expiry, new TypeReference<Map<String, Object>>() {
+		}, new QueryCallback<Map<String, Object>>() {
+			@Override
+			public Map<String, Object> query() {
+				logger.info("==================>>缓存为空，查询数据库");
+				try {
+					++count;
+					logger.info("==================count>>{}", count);
+					Thread.sleep(300);
+				} catch (InterruptedException e) {
+				}
+				Map<String, Object> result = new HashMap<>();
+				result.put("name", "zimu");
+				result.put("age", 18);
+				logger.info("==================>>{}", "返回查询" + result.toString());
+				return result;
+			}
+		});
+	}
 
 }
