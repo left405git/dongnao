@@ -4,9 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.senvon.sample.service.Template.CacheTemplate;
+import com.senvon.sample.service.Template.TemplateCallback;
 import com.whalin.MemCached.MemCachedClient;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,8 @@ public class MenuInfoService {
 	private MenuInfoDAO menuInfoDao;
 	@Autowired
 	private MemCachedClient cachedClient;
+	@Autowired
+	private CacheTemplate cacheTemplate;
 
 	public MenuInfo findMenuInfoById(Integer id) {
 		return menuInfoDao.selectByPrimaryKey(id);
@@ -115,6 +119,27 @@ public class MenuInfoService {
 			logger.info("=================by cache1===================");
 			return JSON.parseArray(jsonObj, MenuInfo.class);
 		}
+	}
 
+	public List<MenuInfo> selectListWithTemplate(final String name, final Page page) {
+		String key = "menuInfos3";
+		Date date = DateUtils.addSeconds(new Date(), 3);
+		List<MenuInfo> result = cacheTemplate.query(key, date, new TypeReference<List<MenuInfo>>() {
+		}, new TemplateCallback<List<MenuInfo>>() {
+			@Override
+			public List<MenuInfo> load() {
+				MenuInfoExample example = new MenuInfoExample();
+				MenuInfoExample.Criteria criteria = example.createCriteria();
+				if (StringUtils.isNotBlank(name)) {
+					criteria.andNameLike("%" + name + "%");
+				}
+				List<MenuInfo> menuInfos = menuInfoDao.selectByPage(example, page);
+				return menuInfos;
+			}
+		});
+
+		logger.info("使用Template方式查询：{}", JSON.toJSONString(result));
+
+		return result;
 	}
 }
