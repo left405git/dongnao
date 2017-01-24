@@ -23,7 +23,7 @@ public class SampleRunner {
 //		DOMConfigurator.configure("src/test/resources/log4j-web-test.xml");
 		
 		Connector connector = new SelectChannelConnector();
-		connector.setPort(18081);
+		connector.setPort(18080);
 		server.addConnector(connector);
 
 		WebAppContext context = new WebAppContext("src/main/webapp", "/sample");

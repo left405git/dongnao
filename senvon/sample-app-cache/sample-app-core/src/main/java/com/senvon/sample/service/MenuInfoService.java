@@ -1,8 +1,15 @@
 package com.senvon.sample.service;
 
+import java.util.Date;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
+import com.whalin.MemCached.MemCachedClient;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,40 +20,101 @@ import com.senvon.sample.model.MenuInfoExample;
 
 @Repository
 public class MenuInfoService {
+	Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private MenuInfoDAO menuInfoDao;
-	
-	public MenuInfo findMenuInfoById(Integer id){
+	@Autowired
+	private MemCachedClient cachedClient;
+
+	public MenuInfo findMenuInfoById(Integer id) {
 		return menuInfoDao.selectByPrimaryKey(id);
 	}
-	
-	public List<MenuInfo> findByName(String name , Page page){
+
+	public List<MenuInfo> findByName(String name, Page page) {
 		MenuInfoExample example = new MenuInfoExample();
 		MenuInfoExample.Criteria criteria = example.createCriteria();
-		if(StringUtils.isNotBlank(name)){
-			criteria.andNameLike("%"+name+"%");
+		if (StringUtils.isNotBlank(name)) {
+			criteria.andNameLike("%" + name + "%");
 		}
 		return menuInfoDao.selectByPage(example, page);
 	}
-	
-	public Integer saveMenuInfo(MenuInfo menuInfo){
-		if(menuInfo != null){
-			if(menuInfo.getId() != null && menuInfo.getId()>0){
+
+	public Integer saveMenuInfo(MenuInfo menuInfo) {
+		if (menuInfo != null) {
+			if (menuInfo.getId() != null && menuInfo.getId() > 0) {
 				//update
 				return menuInfoDao.updateByPrimaryKeySelective(menuInfo);
-			}else{
+			} else {
 				//insert
 				return menuInfoDao.insertSelective(menuInfo);
 			}
 		}
 		return 0;
 	}
-	
-	public Integer deleteMenuInfo(Integer id){
-		if(id != null && id>0){
+
+	public Integer deleteMenuInfo(Integer id) {
+		if (id != null && id > 0) {
 			return menuInfoDao.deleteByPrimaryKey(id);
 		}
 		return 0;
+	}
+
+	public /*synchronized*/ List<MenuInfo> selectListByName(String name, Page page) {
+		long start = System.currentTimeMillis();
+
+		String key = "menuInfos";
+		String jsonObj = cachedClient.get(key) + "";
+		if (StringUtils.isBlank(jsonObj) || "null".equalsIgnoreCase(jsonObj)) {
+			logger.info("=================no cache, 执行耗时{}===================", (System.currentTimeMillis() - start));
+			MenuInfoExample example = new MenuInfoExample();
+			MenuInfoExample.Criteria criteria = example.createCriteria();
+			if (StringUtils.isNotBlank(name)) {
+				criteria.andNameLike("%" + name + "%");
+			}
+			List<MenuInfo> menuInfos = menuInfoDao.selectByPage(example, page);
+
+			cachedClient.set(key, JSON.toJSONString(menuInfos), DateUtils.addSeconds(new Date(), 3));
+
+			return menuInfos;
+		} else {
+			logger.info("=================by cache，耗时{}===================", (System.currentTimeMillis() - start));
+			return JSON.parseArray(jsonObj, MenuInfo.class);
+		}
+
+	}
+
+	public List<MenuInfo> selectListByName2(String name, Page page) {
+		long start = System.currentTimeMillis();
+
+		String key = "menuInfos2";
+		String jsonObj = cachedClient.get(key) + "";
+		if (StringUtils.isBlank(jsonObj) || "null".equalsIgnoreCase(jsonObj)) {
+			synchronized (this) {
+				jsonObj = cachedClient.get(key) + "";
+				if (StringUtils.isBlank(jsonObj) || "null".equalsIgnoreCase(jsonObj)) {
+
+					MenuInfoExample example = new MenuInfoExample();
+					MenuInfoExample.Criteria criteria = example.createCriteria();
+					if (StringUtils.isNotBlank(name)) {
+						criteria.andNameLike("%" + name + "%");
+					}
+					List<MenuInfo> menuInfos = menuInfoDao.selectByPage(example, page);
+
+					logger.info("=================no cache, 执行耗时{}===================", (System.currentTimeMillis() - start));
+
+					cachedClient.set(key, JSON.toJSONString(menuInfos), DateUtils.addSeconds(new Date(), 3));
+
+					return menuInfos;
+				} else {
+					logger.info("=================by cache2===================");
+					return JSON.parseArray(jsonObj, MenuInfo.class);
+				}
+			}
+		} else {
+			logger.info("=================by cache1===================");
+			return JSON.parseArray(jsonObj, MenuInfo.class);
+		}
+
 	}
 }

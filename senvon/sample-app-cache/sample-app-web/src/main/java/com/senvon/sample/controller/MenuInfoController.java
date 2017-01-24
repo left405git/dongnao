@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -26,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.istock.base.ibatis.model.Page;
 import com.senvon.sample.model.MenuInfo;
 import com.senvon.sample.service.MenuInfoService;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class MenuInfoController {
@@ -86,7 +87,7 @@ public class MenuInfoController {
 	
 	
 	@RequestMapping("generate")
-	public @ResponseBody Map<String , Object> generate(ModelMap model ,HttpServletRequest request, Integer id){
+	public @ResponseBody Map<String , Object> generate(ModelMap model , HttpServletRequest request, Integer id){
 		Map<String , Object> result = new HashMap<String , Object>();
 		try{
 			VelocityEngine ve = new VelocityEngine();
